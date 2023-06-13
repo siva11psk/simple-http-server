@@ -1,0 +1,60 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment   
+metadata:
+  labels:
+    app: simple-server
+  name: simple-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: simple-server
+  template:
+    metadata:
+      labels:
+        app: simple-server
+    spec:
+      containers:
+      - image: sivakumarendava/simple-server:latest
+        name: simple-server
+        env:
+          - name: APP_USERNAME
+            value: siva
+          - name: APP_PASSWORD
+            value: siva        
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: simple-server
+  name: simple-server
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: simple-server
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-server
+spec:
+  rules:
+  - host: simple-server.go
+    http:
+      paths:
+      - backend:
+          service:
+            name: simple-server
+            port:
+              number: 8080
+        path: /
+        pathType: Exact
