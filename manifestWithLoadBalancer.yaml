@@ -21,9 +21,12 @@ spec:
         name: simple-server
         env:
           - name: APP_USERNAME
-            value: siva
+            value: "admin"
           - name: APP_PASSWORD
-            value: siva
+            valueFrom: 
+              secretKeyRef:
+                name: simple-server
+                key: APP_PASSWORD 
 
 ---
 apiVersion: v1
@@ -39,4 +42,4 @@ spec:
     targetPort: 8080
   selector:
     app: simple-server
-  type: NodePort
+  type: LoadBalancer

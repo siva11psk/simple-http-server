@@ -1,6 +1,6 @@
 FROM golang:latest as builder
 WORKDIR /app
-COPY . .
+COPY ./src .
 RUN go build -o simple-server .
 
 FROM debian:12-slim
